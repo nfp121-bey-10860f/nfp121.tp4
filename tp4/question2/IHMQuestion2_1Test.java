@@ -18,18 +18,12 @@ public class IHMQuestion2_1Test extends junit.framework.TestCase
         try{  
             Class.forName("question2.IHMQuestion2_1");
             Class.forName("question2.JButtonObserver");
-            //Class.forName("question2.JMouseObserver");
+            Class.forName("question2.JMouseObserver");
         }catch(ClassNotFoundException e){
             fail("classe absente " + e.getMessage());
         }
     }
 
-
-    /**
-     * Met en place les engagements.
-     *
-     * Méthode appelée avant chaque appel de méthode de test.
-     */
     protected void setUp() throws java.lang.Exception{
         f = new IHMQuestion2_1();
         f.pack();
@@ -41,7 +35,7 @@ public class IHMQuestion2_1Test extends junit.framework.TestCase
         robot.delay(100);
     }
 
-    protected void tearDown(){ // throws java.lang.Exception
+    protected void tearDown(){
         f.dispose();
     }
 
@@ -120,6 +114,6 @@ public class IHMQuestion2_1Test extends junit.framework.TestCase
         robot.delay(60);
         robot.mouseRelease(InputEvent.BUTTON1_MASK);
         robot.delay(60);
-    }//end mouseMoveAndClick
+    }
 
 }

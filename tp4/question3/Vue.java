@@ -3,17 +3,10 @@ package question3;
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
-
 import java.util.Observable;
 import java.util.Observer;
 
-/**
- * Décrivez votre classe Controleur ici.
- * 
- * @author (votre nom)
- * @version (un numéro de version ou une date)
- */
-public class Vue extends JPanel {// à compléter
+public class Vue extends JPanel {
 
     private JLabel etatPile;
     private PileModele<Integer> pile;
@@ -25,11 +18,10 @@ public class Vue extends JPanel {// à compléter
         setLayout(new FlowLayout(FlowLayout.LEFT));
         add(etatPile);
         setBackground(Color.green);
-        // inscription auprès du modèle comme observateur
+
     }
 
     public void update(Observable obs, Object arg) {
-        etatPile.setText(pile.toString()); // ou obs.toString()
+        etatPile.setText(pile.toString()); 
     }
-
 }

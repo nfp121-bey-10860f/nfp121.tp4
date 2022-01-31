@@ -8,17 +8,12 @@ import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
 
-/**
- * Décrivez votre classe Controleur ici.
- * 
- * @author (votre nom)
- * @version (un numéro de version ou une date)
- */
 public class Controleur extends JPanel {
 
     private JButton push, add, sub, mul, div, clear;
     private PileModele<Integer> pile;
     private JTextField donnee;
+    JPanel boutons;
 
     public Controleur(PileModele<Integer> pile) {
         super();
@@ -32,33 +27,131 @@ public class Controleur extends JPanel {
         this.div = new JButton("/");
         this.clear = new JButton("[]");
 
-        setLayout(new GridLayout(2, 1));
         add(donnee);
-        donnee.addActionListener(null /* null est à remplacer */);
-        JPanel boutons = new JPanel();
-        boutons.setLayout(new FlowLayout());
-        boutons.add(push);  push.addActionListener(null /* null est à remplacer */);
-        boutons.add(add);   add.addActionListener(null /* null est à remplacer */);
-        boutons.add(sub);   sub.addActionListener(null /* null est à remplacer */);
-        boutons.add(mul);   mul.addActionListener(null /* null est à remplacer */);
-        boutons.add(div);   div.addActionListener(null /* null est à remplacer */);
-        boutons.add(clear); clear.addActionListener(null /* null est à remplacer */);
-        add(boutons);
-        boutons.setBackground(Color.red);
+        donnee.addActionListener(null); //a complet�
+        boutons = new JPanel();
         actualiserInterface();
+
+        push.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                try{
+                    pile.empiler(Integer.parseInt(donnee.getText()));
+                    donnee.setText("");
+                }catch(NumberFormatException nfe){
+                    donnee.setText("Only numbers are acceptable");
+                }catch(PilePleineException ppe){
+                    donnee.setText("Stack is full");
+                }
+            }
+        });
+        boutons.add(add);
+        add.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                try{
+                    if(!pile.estVide() && pile.taille() >= 2){
+                        pile.empiler(pile.depiler() + pile.depiler());
+                        donnee.setText(pile.sommet() + "");
+                    }else{
+                        donnee.setText("Enter at least 2 numbers");
+                    }
+                }catch(PilePleineException ppe){
+                    donnee.setText("Stack is full");
+                }catch(PileVideException pve){
+                    donnee.setText("Stack is empty");
+                }
+                
+            }
+        });
+        boutons.add(sub);
+        sub.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                try{
+                    if(!pile.estVide() && pile.taille() >= 2){
+                        pile.empiler(pile.depiler() - pile.depiler());
+                        donnee.setText(pile.sommet() + "");
+                    }else{
+                        donnee.setText("Enter at least 2 numbers");
+                    }
+                }catch(PilePleineException ppe){
+                    donnee.setText("Stack is full");
+                }catch(PileVideException pve){
+                    donnee.setText("Stack is empty");
+                }
+                
+            }
+        });
+        boutons.add(mul);
+        mul.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                try{
+                    if(!pile.estVide() && pile.taille() >= 2){
+                        pile.empiler(pile.depiler() * pile.depiler());
+                        donnee.setText(pile.sommet() + "");
+                    }else{
+                        donnee.setText("Enter at least 2 numbers");
+                    }
+                }catch(PilePleineException ppe){
+                    donnee.setText("Stack is full");
+                }catch(PileVideException pve){
+                    donnee.setText("Stack is empty");
+                }
+                
+            }
+        });
+        boutons.add(div);
+        div.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                try{
+                    if(!pile.estVide() && pile.taille() >= 2){
+                        int n1 = pile.depiler();
+                        int n2 = pile.depiler();
+                        try{
+                            if(n2 != 0){
+                                pile.empiler(n1 / n2);
+                                donnee.setText(pile.sommet() + "");
+                            }
+                            else
+                                throw new NumberFormatException();
+                        }catch(NumberFormatException nfe){
+                            donnee.setText("Can't devide by 0");
+                        }
+                    }else{
+                        donnee.setText("Enter at least 2 numbers");
+                    }
+                }catch(PilePleineException ppe){
+                    donnee.setText("Stack is full");
+                }catch(PileVideException pve){
+                    donnee.setText("Stack is empty");
+                }
+                
+            }
+        });
+        boutons.add(clear);
+        clear.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                try{
+                    donnee.setText("");
+                    while(!pile.estVide()){
+                        pile.depiler();
+                    }
+                }catch(PileVideException pve){
+                    donnee.setText("Stack is empty");
+                }
+                
+            }
+        });
+        add(boutons);
     }
 
     public void actualiserInterface() {
-        // à compléter
+        setLayout(new GridLayout(2, 1));
+        boutons.setLayout(new FlowLayout());
+        boutons.add(push);
+        boutons.setBackground(Color.red);
     }
 
     private Integer operande() throws NumberFormatException {
         return Integer.parseInt(donnee.getText());
     }
-
-    // à compléter
-    // en cas d'exception comme division par zéro, 
-    // mauvais format de nombre suite à l'appel de la méthode operande
-    // la pile reste en l'état (intacte)
 
 }
